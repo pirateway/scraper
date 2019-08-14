@@ -3,7 +3,7 @@
 
 Сборка приложения
 
-### `java -jar ./target/tm-frontend-primefaces.war`
+### `java -jar ./target/scraper.war`
 
 Запуск приложения из командной строки
 
