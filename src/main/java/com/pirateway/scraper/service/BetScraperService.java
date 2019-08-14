@@ -22,7 +22,7 @@ public class BetScraperService {
         Document doc = Jsoup
                 .connect("https://positivebet.com/ru/bets/index/")
                 .userAgent("Chrome/76.0.3809.100")
-                .referrer("http://www.google.com")
+                .referrer("http://www.yandex.ru")
                 .get();
 
         Elements rows = doc.select("div#gridBets.grid-view").select("tbody");
