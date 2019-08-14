@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<f:view>
+    <ui:composition template="/WEB-INF/jsf/template/template.xhtml">
+        <ui:param name="title" value="USER MANAGEMENT"/>
+        <ui:define name="content">
+            <h:form id="userListForm">
+                <p:growl id="msgs" showDetail="true" sticky="true"/>
+
+                <p:dataTable
+                        id="userTable"
+                        var="user"
+                        binding="#{table}"
+                        value="#{userViewController.users}"
+                        selectionMode="single"
+                        selection="#{userViewController.selectedUser}"
+                        rowKey="#{user.id}"
+                        rows="10"
+                        paginator="true"
+                        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                        rowsPerPageTemplate="10,20,50 ">
+                    <p:ajax event="rowSelect"
+                            listener="#{userViewController.onRowSelect}"
+                            update=":userListForm:msgs"/>
+                    <p:ajax event="rowUnselect"
+                            listener="#{userViewController.onRowUnselect}"
+                            update=":userListForm:msgs"/>
+                    <p:column headerText="#" width="10">
+                        <p:outputLabel value="#{table.rowIndex+1}"/>
+                    </p:column>
+
+                    <p:column headerText="ID" rendered="false">
+                        <p:outputLabel value="#{user.id}"/>
+                    </p:column>
+                    <p:column headerText="Login" sortable="true" sortBy="#{user.login}">
+                        <p:outputLabel value="#{user.login}"/>
+                    </p:column>
+                    <p:column headerText="Name" sortable="true" sortBy="#{user.name}">
+                        <p:outputLabel value="#{user.name}"/>
+                    </p:column>
+                    <p:column headerText="Role" width="150" sortable="true" sortBy="#{user.role}">
+                        <p:outputLabel value="#{user.role}"/>
+                    </p:column>
+                </p:dataTable>
+
+                <p:panelGrid columns="1" style="width: 100%; text-align:left;margin-top: -1px;">
+                    <p:outputPanel>
+                        <p:commandButton
+                                value="Create"
+                                icon="pi pi-file"
+                                style="margin-top:10px;margin-bottom:10px;"
+                                action="#{userViewController.userCreate}">
+                            <p:ajax event="dialogReturn" update=":userListForm:userTable"/>
+                        </p:commandButton>
+
+                        <p:commandButton
+                                update=":userListForm:msgs"
+                                icon="pi pi-pencil"
+                                value="Edit"
+                                action="#{userViewController.userEdit}"
+                                style="margin-left:15px;">
+                            <p:ajax event="dialogReturn" update=":userListForm:userTable"/>
+                        </p:commandButton>
+
+                        <p:commandButton
+                                update="userListForm"
+                                icon="pi pi-trash"
+                                value="Delete"
+                                style="margin-left:15px;"
+                                action="#{userViewController.userDelete}"
+                        />
+                    </p:outputPanel>
+                </p:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</f:view>
+</html>

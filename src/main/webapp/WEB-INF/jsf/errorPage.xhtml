@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head></h:head>
+<h:body style="background-color:#323232">
+    <div class="menu-bar">
+        <h:form>
+            <p:growl id="growl" showDetail="true" sticky="true"/>
+            <p:menubar>
+                <p:menuitem value="Home"
+                            outcome="mainOutcome"
+                            icon="pi pi-home"
+                            style="margin: 5px 0px 5px 5px;"/>
+            </p:menubar>
+        </h:form>
+    </div>
+    <div class="content">
+        <p:panel id="contentPanel" header="ERROR">
+            <p:panelGrid columns="2" styleClass="ui-noborder">
+                <h:outputText value="Code:" style="font-weight: bold;"/>
+                <h:outputText value="#{exceptionHandlerController.statusCode}"/>
+
+                <h:outputText value="Message:" style="font-weight: bold;"/>
+                <h:outputText value="#{exceptionHandlerController.message}"/>
+
+                <h:outputText value="Exception:" style="font-weight: bold;"/>
+                <h:outputText value="#{exceptionHandlerController.exception}"/>
+
+                <h:outputText value="Request URI:" style="font-weight: bold;"/>
+                <h:outputText value="#{exceptionHandlerController.requestURI}"/>
+            </p:panelGrid>
+        </p:panel>
+        <p:panel id="footer" header="© 2019 I-teco, Inc." collapsed="true"/>
+    </div>
+</h:body>
+</html>
+

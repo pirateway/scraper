@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<f:view>
+    <ui:composition template="/WEB-INF/jsf/template/template.xhtml">
+        <ui:param name="title" value="LIVE FORKS"/>
+        <ui:define name="content">
+            <h:form id="forkListForm">
+                <p:growl id="msgs" showDetail="true" sticky="true"/>
+
+                <p:dataTable
+                        id="forkTable"
+                        var="fork"
+                        binding="#{table}"
+                        value="#{forkViewController.forks}"
+                        selectionMode="single"
+                        selection="#{forkViewController.selectedFork}"
+                        rowKey="#{fork.id}"
+                        rows="10"
+                        paginator="true"
+                        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                        rowsPerPageTemplate="10,20,50 ">
+                    <p:column headerText="#" width="15">
+                        <p:outputLabel value="#{table.rowIndex+1}"/>
+                    </p:column>
+
+                    <p:column headerText="ID" rendered="false">
+                        <p:outputLabel value="#{fork.id}"/>
+                    </p:column>
+
+                    <p:column headerText="Sport" sortable="true" sortBy="#{fork.type}" width="150">
+                        <p:outputLabel value="#{fork.type}"/>
+                    </p:column>
+
+                    <p:column headerText="Profit" sortable="true" sortBy="#{fork.profit}" width="70">
+                        <p:outputLabel value="#{fork.profit}"/>
+                    </p:column>
+
+                    <p:column headerText="Bookmaker" width="150">
+                        <p:outputLabel value="#{fork.eventOneBk}"/>
+                        <h:outputText value="&lt;br/&gt;" escape="false" />
+                        <p:outputLabel value="#{fork.eventTwoBk}"/>
+                    </p:column>
+
+                    <p:column headerText="Description">
+                        <p:outputLabel value="#{fork.eventOneDescription}"/>
+                        <h:outputText value="&lt;br/&gt;" escape="false" />
+                        <p:outputLabel value="#{fork.eventTwoDescription}"/>
+                    </p:column>
+
+                    <p:column headerText="Link" width="50">
+                        <p:link href="#{fork.eventOneLink}" value="link1"/>
+                        <h:outputText value="&lt;br/&gt;" escape="false" />
+                        <p:link href="#{fork.eventTwoLink}" value="link2"/>
+                    </p:column>
+
+                    <p:column headerText="Coefficient" width="70">
+                        <p:outputLabel value="#{fork.eventOneCoefficient}"/>
+                        <h:outputText value="&lt;br/&gt;" escape="false" />
+                        <p:outputLabel value="#{fork.eventTwoCoefficient}"/>
+                    </p:column>
+
+                </p:dataTable>
+
+                <p:panelGrid columns="1" style="width: 100%; text-align:left;margin-top: -1px;">
+                    <p:outputPanel>
+                        <p:commandButton
+                                value="Refresh"
+                                icon="pi pi-file"
+                                style="margin-top:10px;margin-bottom:10px;"
+                                action="#{forkViewController.refreshForks}"
+                                update=":forkListForm:forkTable"
+                        />
+                    </p:outputPanel>
+                </p:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</f:view>
+</html>
