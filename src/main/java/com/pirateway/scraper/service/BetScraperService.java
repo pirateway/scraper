@@ -3,6 +3,7 @@ package com.pirateway.scraper.service;
 import com.pirateway.scraper.exception.DataValidateException;
 import com.pirateway.scraper.api.service.IForkService;
 import com.pirateway.scraper.model.entity.Fork;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -75,12 +76,12 @@ public class BetScraperService {
             fork.setEventOneBk("1) "+evenOneBk);
             fork.setEventOneDescription("1) "+eventOneDescription);
             fork.setEventOneCoefficient("1) "+eventOneCoefficient);
-            fork.setEventOneLink("https://positivebet.com"+eventOneLink);
+            fork.setEventOneLink(crawl("https://positivebet.com"+eventOneLink));
 
             fork.setEventTwoBk("2) "+evenTwoBk);
             fork.setEventTwoDescription("2) "+eventTwoDescription);
             fork.setEventTwoCoefficient("2) "+eventTwoCoefficient);
-            fork.setEventTwoLink("https://positivebet.com"+eventTwoLink);
+            fork.setEventTwoLink(crawl("https://positivebet.com"+eventTwoLink));
 
 
             forkService.create(fork);
@@ -89,5 +90,13 @@ public class BetScraperService {
 
     public void clear() throws DataValidateException {
         forkService.clear();
+    }
+
+    private String crawl(String url) throws IOException {
+
+        Connection.Response response = Jsoup.connect(url).followRedirects(false).execute();
+        String link = response.parse().getElementsByTag("meta").get(0).attr("content");
+
+        return link.substring(link.indexOf('=')+1);
     }
 }
