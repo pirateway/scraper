@@ -18,8 +18,6 @@
                         var="fork"
                         binding="#{table}"
                         value="#{forkViewController.forks}"
-                        selectionMode="single"
-                        selection="#{forkViewController.selectedFork}"
                         rowKey="#{fork.id}"
                         rows="10"
                         paginator="true"
@@ -37,33 +35,38 @@
                         <p:outputLabel value="#{fork.type}"/>
                     </p:column>
 
-                    <p:column headerText="Profit" sortable="true" sortBy="#{fork.profit}" width="70">
+                    <p:column headerText="%" sortable="true" sortBy="#{fork.profit}" width="40">
                         <p:outputLabel value="#{fork.profit}"/>
                     </p:column>
 
                     <p:column headerText="Bookmaker" width="150">
-                        <p:outputLabel value="#{fork.eventOneBk}"/>
+                        <p:outputLabel value="1) #{fork.eventOneBk}"/>
                         <h:outputText value="&lt;br/&gt;" escape="false" />
-                        <p:outputLabel value="#{fork.eventTwoBk}"/>
+                        <p:outputLabel value="2) #{fork.eventTwoBk}"/>
                     </p:column>
 
                     <p:column headerText="Description">
-                        <p:outputLabel value="#{fork.eventOneDescription}"/>
+                        <p:outputLabel value="1) #{fork.eventOneDescription}"/>
                         <h:outputText value="&lt;br/&gt;" escape="false" />
-                        <p:outputLabel value="#{fork.eventTwoDescription}"/>
+                        <p:outputLabel value="2) #{fork.eventTwoDescription}"/>
                     </p:column>
 
-                    <p:column headerText="Link" width="50">
-                        <p:link href="#{fork.eventOneLink}" value="link1" target="_blank"/>
+                    <p:column headerText="Link" width="200">
+                        <p:link href="#{fork.eventOneLink}" value="1) #{fork.eventOneTextLink}" target="_blank"/>
                         <h:outputText value="&lt;br/&gt;" escape="false" />
-                        <p:link href="#{fork.eventTwoLink}" value="link2" target="_blank"/>
+                        <p:link href="#{fork.eventTwoLink}" value="2) #{fork.eventTwoTextLink}" target="_blank"/>
                     </p:column>
 
                     <p:column headerText="Coefficient" width="70">
-                        <p:outputLabel value="#{fork.eventOneCoefficient}"/>
+                        <p:outputLabel value="1) #{fork.eventOneCoefficient}"/>
                         <h:outputText value="&lt;br/&gt;" escape="false" />
-                        <p:outputLabel value="#{fork.eventTwoCoefficient}"/>
+                        <p:outputLabel value="2) #{fork.eventTwoCoefficient}"/>
                     </p:column>
+
+                    <p:column width="30">
+                        <p:commandButton action="#{calculatorViewController.show(fork)}" id="calculatorBtn" icon="fa fa-calculator" title="Calculator" />
+                    </p:column>
+
 
                 </p:dataTable>
 

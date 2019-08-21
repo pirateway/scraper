@@ -60,6 +60,12 @@ public class Fork extends AbstractEntity {
     private String eventTwoLink;
 
     @Nullable
+    private String eventOneTextLink;
+
+    @Nullable
+    private String eventTwoTextLink;
+
+    @Nullable
     public String getType() {
         return type;
     }
@@ -156,5 +162,23 @@ public class Fork extends AbstractEntity {
 
     public void setEventTwoLink(@Nullable String eventTwoLink) {
         this.eventTwoLink = eventTwoLink;
+    }
+
+    @Nullable
+    public String getEventOneTextLink() {
+        return eventOneTextLink;
+    }
+
+    public void setEventOneTextLink(@Nullable String eventOneTextLink) {
+        this.eventOneTextLink = eventOneTextLink;
+    }
+
+    @Nullable
+    public String getEventTwoTextLink() {
+        return eventTwoTextLink;
+    }
+
+    public void setEventTwoTextLink(@Nullable String eventTwoTextLink) {
+        this.eventTwoTextLink = eventTwoTextLink;
     }
 }

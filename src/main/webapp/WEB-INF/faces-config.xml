@@ -44,5 +44,9 @@
             <from-outcome>forkListOutcome</from-outcome>
             <to-view-id>/WEB-INF/jsf/fork/forkList.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>calculatorOutcome</from-outcome>
+            <to-view-id>/WEB-INF/jsf/fork/calculator.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
 </faces-config>

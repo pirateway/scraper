@@ -40,24 +40,24 @@ public class BetScraperService {
             String eventTwoDescription = "Событие скрыто!";
             String eventOneLink = "#";
             String eventTwoLink = "#";
+            String eventOneTextLink = "Событие скрыто!";
+            String eventTwoTextLink = "Событие скрыто!";
             String eventOneMoving = "";
             String eventTwoMoving = "";
             String eventOneCoefficient = "";
             String eventTwoCoefficient = "";
             String eventOneForksCount = "";
             String eventTwoForksCount = "";
+
             try {
                 eventOneDescription = row.select("td").get(3).select("div").get(0).text() +
                         row.select("td").get(3).select("small").get(0).text();
                 eventTwoDescription = row.select("td").get(3).select("div").get(1).text() +
                         row.select("td").get(3).select("small").get(1).text();
                 eventOneLink = row.select("td").get(4).select("nobr").get(0).select("a").attr("href");
-                String response1 = Jsoup.connect("https://positivebet.com"+eventOneLink).followRedirects(true).execute().url().toExternalForm();
-                System.out.println(response1);
-
+                eventOneTextLink = row.select("td").get(4).select("nobr").get(0).select("a").text();
                 eventTwoLink = row.select("td").get(4).select("nobr").get(1).select("a").attr("href");
-                String response2 = Jsoup.connect("https://positivebet.com"+eventTwoLink).followRedirects(true).execute().url().toExternalForm();
-                System.out.println(response2);
+                eventTwoTextLink = row.select("td").get(4).select("nobr").get(1).select("a").text();
 
                 eventOneMoving = row.select("td").get(5).select("nobr").get(0).select("a").select("img").attr("alt");
                 eventTwoMoving = row.select("td").get(5).select("nobr").get(1).select("a").select("img").attr("alt");
@@ -73,16 +73,17 @@ public class BetScraperService {
                     forkAge,
                     profit);
 
-            fork.setEventOneBk("1) "+evenOneBk);
-            fork.setEventOneDescription("1) "+eventOneDescription);
-            fork.setEventOneCoefficient("1) "+eventOneCoefficient);
+            fork.setEventOneBk(evenOneBk);
+            fork.setEventOneDescription(eventOneDescription);
+            fork.setEventOneCoefficient(eventOneCoefficient);
             fork.setEventOneLink(crawl("https://positivebet.com"+eventOneLink));
+            fork.setEventOneTextLink(eventOneTextLink);
 
-            fork.setEventTwoBk("2) "+evenTwoBk);
-            fork.setEventTwoDescription("2) "+eventTwoDescription);
-            fork.setEventTwoCoefficient("2) "+eventTwoCoefficient);
+            fork.setEventTwoBk(evenTwoBk);
+            fork.setEventTwoDescription(eventTwoDescription);
+            fork.setEventTwoCoefficient(eventTwoCoefficient);
             fork.setEventTwoLink(crawl("https://positivebet.com"+eventTwoLink));
-
+            fork.setEventTwoTextLink(eventTwoTextLink);
 
             forkService.create(fork);
         }
@@ -93,10 +94,8 @@ public class BetScraperService {
     }
 
     private String crawl(String url) throws IOException {
-
         Connection.Response response = Jsoup.connect(url).followRedirects(false).execute();
         String link = response.parse().getElementsByTag("meta").get(0).attr("content");
-
         return link.substring(link.indexOf('=')+1);
     }
 }
