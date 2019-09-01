@@ -16,7 +16,7 @@ public class CalculatorViewController {
             @NotNull final Fork fork
     ){
         selectedFork = fork;
-        PrimeFaces.current().dialog().openDynamic("calculatorOutcome", OptionsUtil.getWindowOptions(), null);
+        PrimeFaces.current().dialog().openDynamic("calculatorOutcome", OptionsUtil.getCalculatorWindowOptions(), null);
     }
 
     @Nullable

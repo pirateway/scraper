@@ -7,25 +7,57 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
-    <title>Calculator:</title>
+    <title>Calculator</title>
 </h:head>
 
 <h:body>
     <h:form id="calculatorForm">
         <p:growl id="msgs" showDetail="true" sticky="true"/>
 
-        <p:outputPanel id="userDetail" style="margin-top: 30px">
+        <p:outputPanel id="userDetail">
 
-            <p:panelGrid columns="2" styleClass="ui-noborder" style="width: 100%">
+            <p:panelGrid columns="3" styleClass="ui-noborder" style="width: 100%">
+                <f:facet name="header" style="margin-top:20px">
+                    <p:row>
+                        <p:column colspan="3">#{calculatorViewController.selectedFork.eventOneDescription}</p:column>
+                    </p:row>
+                </f:facet>
+
+                <p:outputLabel style="font-weight: bold;" value="Bookmaker:"/>
                 <p:outputLabel value="#{calculatorViewController.selectedFork.eventOneBk}"/>
                 <p:outputLabel value="#{calculatorViewController.selectedFork.eventTwoBk}"/>
 
+                <p:outputLabel style="font-weight: bold;" value="Ставка:"/>
                 <p:link href="#{calculatorViewController.selectedFork.eventOneLink}" value="#{calculatorViewController.selectedFork.eventOneTextLink}" target="_blank"/>
                 <p:link href="#{calculatorViewController.selectedFork.eventTwoLink}" value="#{calculatorViewController.selectedFork.eventTwoTextLink}" target="_blank"/>
 
-                <p:inputText  value="#{calculatorViewController.selectedFork.eventOneCoefficient}"/>
-                <p:inputText  value="#{calculatorViewController.selectedFork.eventTwoCoefficient}"/>
+                <p:outputLabel style="font-weight: bold;" value="Коэффициент:"/>
+                <p:inputText  value="#{calculatorViewController.selectedFork.eventOneCoefficient}"  style="width:150px"/>
+                <p:inputText  value="#{calculatorViewController.selectedFork.eventTwoCoefficient}"  style="width:150px"/>
 
+                <p:outputLabel style="font-weight: bold;" value="Сумма:"/>
+                <p:inputText   style="width:150px"/>
+                <p:inputText   style="width:150px"/>
+
+                <p:outputLabel style="font-weight: bold;" value="Валюта:"/>
+                <p:selectOneMenu id="currencyEventOne" style="width:150px">
+                    <f:selectItem itemLabel="USD" itemValue="USD" />
+                    <f:selectItem itemLabel="RUB" itemValue="RUB" />
+                    <f:selectItem itemLabel="UAH" itemValue="UAH" />
+                </p:selectOneMenu>
+                <p:selectOneMenu id="currencyEventTwo" style="width:150px">
+                    <f:selectItem itemLabel="USD" itemValue="USD" />
+                    <f:selectItem itemLabel="RUB" itemValue="RUB" />
+                    <f:selectItem itemLabel="UAH" itemValue="UAH" />
+                </p:selectOneMenu>
+                <p:outputLabel style="font-weight: bold;" value="Доход:"/>
+                <p:outputLabel value="#{calculatorViewController.selectedFork.eventOneBk}"/>
+                <p:outputLabel value="#{calculatorViewController.selectedFork.eventTwoBk}"/>
+                <p:commandButton
+                        value="Refresh"
+                        id="calculatorBtn"
+                        action="#{forkViewController.refreshForks}"
+                        icon="fa fa-refresh" title="Calculator" />
             </p:panelGrid>
         </p:outputPanel>
     </h:form>

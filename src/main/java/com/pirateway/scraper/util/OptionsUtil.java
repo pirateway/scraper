@@ -18,5 +18,17 @@ public class OptionsUtil {
         options.put("headerElement", "customheader");
         return options;
     }
+
+    @NotNull
+    public static Map<String, Object> getCalculatorWindowOptions() {
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("modal", true);
+        options.put("width", 520);
+        options.put("height", 420);
+        options.put("contentWidth", "100%");
+        options.put("contentHeight", "100%");
+        options.put("headerElement", "customheader");
+        return options;
+    }
 }
 

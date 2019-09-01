@@ -64,7 +64,9 @@
                     </p:column>
 
                     <p:column width="30">
-                        <p:commandButton action="#{calculatorViewController.show(fork)}" id="calculatorBtn" icon="fa fa-calculator" title="Calculator" />
+                        <p:commandButton action="#{calculatorViewController.show(fork)}" id="calculatorBtn" icon="fa fa-calculator" title="Calculator" >
+                            <p:ajax event="dialogReturn" update=":forkListForm:forkTable"/>
+                        </p:commandButton>
                     </p:column>
 
 
@@ -77,8 +79,8 @@
                                 icon="pi pi-file"
                                 style="margin-top:10px;margin-bottom:10px;"
                                 action="#{forkViewController.refreshForks}"
-                                update=":forkListForm:forkTable"
-                        />
+                                update=":forkListForm:forkTable" >
+                        </p:commandButton>
                     </p:outputPanel>
                 </p:panelGrid>
             </h:form>

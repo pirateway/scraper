@@ -19,6 +19,8 @@ public class BetScraperService {
     @Autowired
     IForkService forkService;
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(BetScraperService.class);
+
     public void refresh() throws DataValidateException, IOException {
         Document doc = Jsoup
                 .connect("https://positivebet.com/ru/bets/index/")
@@ -50,9 +52,9 @@ public class BetScraperService {
             String eventTwoForksCount = "";
 
             try {
-                eventOneDescription = row.select("td").get(3).select("div").get(0).text() +
+                eventOneDescription = row.select("td").get(3).select("div").get(0).text() +" "+
                         row.select("td").get(3).select("small").get(0).text();
-                eventTwoDescription = row.select("td").get(3).select("div").get(1).text() +
+                eventTwoDescription = row.select("td").get(3).select("div").get(1).text() +" "+
                         row.select("td").get(3).select("small").get(1).text();
                 eventOneLink = row.select("td").get(4).select("nobr").get(0).select("a").attr("href");
                 eventOneTextLink = row.select("td").get(4).select("nobr").get(0).select("a").text();
@@ -64,7 +66,9 @@ public class BetScraperService {
                 eventOneCoefficient = row.select("td").get(5).select("nobr").get(0).text();
                 eventTwoCoefficient = row.select("td").get(5).select("nobr").get(1).text();
 
-            } catch (Exception e){}
+            } catch (Exception e){
+                log.error(" Logger Error: "+e.getMessage());
+            }
 
             Fork fork = new Fork(
                     String.valueOf(i),
@@ -95,7 +99,9 @@ public class BetScraperService {
 
     private String crawl(String url) throws IOException {
         Connection.Response response = Jsoup.connect(url).followRedirects(false).execute();
-        String link = response.parse().getElementsByTag("meta").get(0).attr("content");
-        return link.substring(link.indexOf('=')+1);
+        log.info(" Logger: "+url);
+        /*String link = response.parse().getElementsByTag("meta").get(0).attr("content");
+        return link.substring(link.indexOf('=')+1);*/
+        return url;
     }
 }
