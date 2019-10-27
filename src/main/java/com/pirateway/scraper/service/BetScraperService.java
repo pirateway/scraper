@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class BetScraperService implements IBetScraperService {
@@ -21,18 +23,61 @@ public class BetScraperService implements IBetScraperService {
     IForkService forkService;
 
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(BetScraperService.class);
+    private static final String USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1636.0 Safari/537.36";
+
+    @Override
+    public HashMap<String, String> login(String loginFormUrl, String username, String password) throws IOException {
+
+        HashMap<String, String> cookies = new HashMap<>();
+        HashMap<String, String> formData = new HashMap<>();
+
+        Connection.Response loginForm = Jsoup
+                .connect(loginFormUrl)
+                .method(Connection.Method.GET)
+                .userAgent(USER_AGENT)
+                .execute();
+
+        Document loginDoc = loginForm.parse();
+        cookies.putAll(loginForm.cookies());
+        String authToken = loginDoc.select("#login-form > input[type=hidden]").val();
+
+        formData.put("YII_CSRF_TOKEN", authToken);
+        formData.put("UserLogin[username]", username);
+        formData.put("UserLogin[password]", password);
+        formData.put("UserLogin[rememberMe]", "0");
+        formData.put("UserLogin[rememberMe]", "1");
+        formData.put("yt0", "");
+
+        Connection.Response homePage = Jsoup.connect(loginFormUrl)
+                .cookies(cookies)
+                .data(formData)
+                .method(Connection.Method.POST)
+                .userAgent(USER_AGENT)
+                .execute();
+
+        cookies.put("PHPSESSID", homePage.cookie("PHPSESSID"));
+        return cookies;
+    }
 
     public void refresh() throws DataValidateException, IOException {
-        Document doc = Jsoup
-                .connect("https://positivebet.com/ru/bets/index?markNewEvent=false&perPage=30&crid=&ajax=gridBets")
+
+        HashMap<String, String> cookies = login(
+                "https://positivebet.com/ru/user/login",
+                "alexpet20@mail.ru",
+                "ihaihaiha");
+
+        Connection.Response forkPage = Jsoup
+                .connect("https://positivebet.com/ru/bets/index?markNewEvent=false&perPage=20&crid=&ajax=gridBets")
                 .header("X-Requested-With", "XMLHttpRequest")
                 .header("Accept", "*/*")
                 .header("Accept-Encoding", "gzip, deflate, sdch")
                 .header("Accept-Language", "ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4")
-                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1636.0 Safari/537.36")
-                .maxBodySize(0)
-                .timeout(600000)
-                .get();
+                .cookies(cookies)
+                .userAgent(USER_AGENT)
+                .execute();
+
+        Document doc = forkPage.parse();
+//        System.out.println(doc);
         Elements rows = doc.select("div#gridBets.grid-view").select("tbody");
         int i = 0;
         for (Element row : rows.select("tr")) {
@@ -174,13 +219,13 @@ public class BetScraperService implements IBetScraperService {
             fork.setEventOneBk(evenOneBk);
             fork.setEventOneDescription(eventOneDescription);
             fork.setEventOneCoefficient(eventOneCoefficient);
-            fork.setEventOneLink(crawl("https://positivebet.com" + eventOneLink));
+            fork.setEventOneLink(crawl("https://positivebet.com" + eventOneLink, cookies));
             fork.setEventOneTextLink(eventOneTextLink);
 
             fork.setEventTwoBk(evenTwoBk);
             fork.setEventTwoDescription(eventTwoDescription);
             fork.setEventTwoCoefficient(eventTwoCoefficient);
-            fork.setEventTwoLink(crawl("https://positivebet.com" + eventTwoLink));
+            fork.setEventTwoLink(crawl("https://positivebet.com" + eventTwoLink, cookies));
             fork.setEventTwoTextLink(eventTwoTextLink);
 
             forkService.create(fork);
@@ -191,8 +236,9 @@ public class BetScraperService implements IBetScraperService {
         forkService.clear();
     }
 
-    private String crawl(String url) throws IOException {
-        Connection.Response response = Jsoup.connect(url).followRedirects(false).execute();
+    private String crawl(String url, Map<String, String> cookies) throws IOException {
+        Connection.Response response =
+                Jsoup.connect(url).cookies(cookies).followRedirects(false).execute();
         String link = response.parse().getElementsByTag("meta").get(0).attr("content");
         return link.substring(link.indexOf('=') + 1);
     }
