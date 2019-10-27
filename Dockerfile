@@ -1,4 +1,4 @@
 FROM java:8
-ADD ./target/tm-frontend-primefaces.war .
+ADD ./target/scraper.war .
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "tm-frontend-primefaces.war"]
+ENTRYPOINT ["java", "-jar", "scraper.war"]

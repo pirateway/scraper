@@ -1,5 +1,6 @@
 package com.pirateway.scraper.face;
 
+import com.pirateway.scraper.api.service.IBetScraperService;
 import com.pirateway.scraper.api.service.IForkService;
 import com.pirateway.scraper.exception.DataValidateException;
 import com.pirateway.scraper.model.entity.Fork;
@@ -36,7 +37,7 @@ public class ForkViewController {
 
     @NotNull
     @Autowired
-    private BetScraperService betScraperService;
+    private IBetScraperService betScraperService;
 
     public Collection<Fork> getForks(
     ) throws DataValidateException {
@@ -49,7 +50,7 @@ public class ForkViewController {
     }
 
     public void refreshForks(
-    ) throws DataValidateException, IOException {
+    ) throws DataValidateException, IOException, InterruptedException {
         betScraperService.clear();
         betScraperService.refresh();
     }
