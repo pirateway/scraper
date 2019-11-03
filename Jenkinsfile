@@ -13,14 +13,14 @@ pipeline {
         }
         stage('DOCKER-BUILD') {
             steps {
-                sh 'docker build -t task-manager/primefaces .'
+                sh 'docker build -t scraper/scraper .'
             }
         }
         stage('DOCKER-RUN') {
      	    steps {
-        	    sh 'docker stop tmp || true'
-            	sh 'docker rm tmp || true'
-            	sh 'docker run -d --name="tmp" --hostname="tmp" --network="volnenkoschool_default" task-manager/primefaces'
+        	    sh 'docker stop scraper || true'
+            	sh 'docker rm scraper || true'
+            	sh 'docker run --name="scraper" -d -p 80:8080 scraper/scraper'
             }
         }
     }
