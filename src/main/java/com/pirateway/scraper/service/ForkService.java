@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class ForkService implements IForkService {
@@ -33,6 +34,15 @@ public class ForkService implements IForkService {
     ) throws DataValidateException {
         DataValidator.validateFork(fork);
         forkRepository.save(fork);
+    }
+
+    @Override
+    @Transactional
+    public void createAll(@Nullable List<Fork> forks
+    ) throws DataValidateException {
+        for (Fork fork:forks){
+            create(fork);
+        }
     }
 
     @Override

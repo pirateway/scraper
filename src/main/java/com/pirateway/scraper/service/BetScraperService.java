@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -60,6 +62,8 @@ public class BetScraperService implements IBetScraperService {
     }
 
     public void refresh() throws DataValidateException, IOException {
+
+        List<Fork> forks = new ArrayList<>();
 
         HashMap<String, String> cookies = login(
                 "https://positivebet.com/ru/user/login",
@@ -228,7 +232,11 @@ public class BetScraperService implements IBetScraperService {
             fork.setEventTwoLink(crawl("https://positivebet.com" + eventTwoLink, cookies));
             fork.setEventTwoTextLink(eventTwoTextLink);
 
-            forkService.create(fork);
+            //forkService.create(fork);
+            forks.add(fork);
+        }
+        if (forks!=null){
+            forkService.createAll(forks);
         }
     }
 

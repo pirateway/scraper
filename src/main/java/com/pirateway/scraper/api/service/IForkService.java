@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public interface IForkService {
@@ -14,6 +15,11 @@ public interface IForkService {
     @Transactional
     void create(
             @Nullable final Fork fork
+    ) throws DataValidateException;
+
+    @Transactional
+    void createAll(
+            @Nullable final List<Fork> forks
     ) throws DataValidateException;
 
     /*@Transactional
